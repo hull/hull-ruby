@@ -35,9 +35,17 @@ examples:
     # To get the current app
     Hull.get('app')
 
-    # To get on object
-    
+    # To get the a list of comments on the current app (with pagination)
+    Hull.get('app/comments', limit: 10, page: 2)
 
+    # To update an existing object
+    Hull.put('app', { name: 'My Super App' })
+
+with Hull entities :
+
+    Hull.get('entity', { uid: 'http://example.com' })
+    Hull.put('entity', { uid: 'http://example.com', name: 'My super Page' })
+    Hull.delete('entity', { uid: 'http://example.com' })
 
 
 ## Contributing
