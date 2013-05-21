@@ -1,6 +1,8 @@
 require 'hull/config'
 require 'hull/connection'
 require 'hull/request'
+require 'base64'
+require 'openssl'
 
 module Hull
   class Client
@@ -56,5 +58,12 @@ module Hull
       current_user_id(user_auth['Hull-User-Id'], user_auth['Hull-User-Sig'])
     end
 
+    def user_hash user_infos
+      timestamp = Time.now.to_i.to_s
+      message = Base64.encode64(user_infos.to_json).gsub("\n", "")
+      sig = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('sha1'), [message, timestamp].join(" "), app_secret)
+      [message, sig, timestamp].join(" ")
+    end
+    
   end
 end

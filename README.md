@@ -20,11 +20,11 @@ Or install it yourself as:
 
 ### Configuration
 
-Hull.configure do
-  app_id      = "your-app-id"
-  app_secret  = "your-app-id"
-  endpoint    = "http://ORG-NAMESPACE.alpha.hullapp.io"
-end
+    Hull.configure do |c|
+      c.app_id      = "your-app-id"
+      c.app_secret  = "your-app-secret"
+      c.endpoint    = "http://ORG-NAMESPACE.hullapp.io"
+    end
 
 ### Making API Calls
 
@@ -46,6 +46,23 @@ with Hull entities :
     Hull.get('entity', { uid: 'http://example.com' })
     Hull.put('entity', { uid: 'http://example.com', name: 'My super Page' })
     Hull.delete('entity', { uid: 'http://example.com' })
+
+
+### Bring your own users
+
+In addition to providing multiple social login options, Hull allows you to create and authenticate users that are registered within your own app.
+
+To use this feature, you just have to add a `user_hash` key at the initialization of hull.js : 
+
+In you view : 
+
+    <script>
+      Hull.init({
+        appId:  "<%= Hull.app_id %>",
+        orgUrl: "<%= Hull.endpoint %>",
+        user_hash: "<%= Hull.user_hash({ id: "123", email: "bill@hullapp.io", name: "Bill Evans" })  %>"
+      });
+    </script>
 
 
 ## Contributing
