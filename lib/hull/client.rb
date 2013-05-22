@@ -61,7 +61,7 @@ module Hull
     def user_hash user_infos
       timestamp = Time.now.to_i.to_s
       message = Base64.encode64(user_infos.to_json).gsub("\n", "")
-      sig = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('sha1'), [message, timestamp].join(" "), app_secret)
+      sig = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('sha1'), app_secret, [message, timestamp].join(" "))
       [message, sig, timestamp].join(" ")
     end
     
