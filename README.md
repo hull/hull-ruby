@@ -52,7 +52,7 @@ with Hull entities :
 
 In addition to providing multiple social login options, Hull allows you to create and authenticate users that are registered within your own app.
 
-To use this feature, you just have to add a `user_hash` key at the initialization of hull.js : 
+To use this feature, you just have to add a `userHash` key at the initialization of hull.js : 
 
 In you view : 
 
@@ -60,7 +60,7 @@ In you view :
       Hull.init({
         appId:  "<%= Hull.app_id %>",
         orgUrl: "<%= Hull.endpoint %>",
-        user_hash: "<%= Hull.user_hash({ id: "123", email: "bill@hullapp.io", name: "Bill Evans" })  %>"
+        userHash: "<%= Hull.user_hash({ id: "123", email: "bill@hullapp.io", name: "Bill Evans" })  %>"
       });
     </script>
 
