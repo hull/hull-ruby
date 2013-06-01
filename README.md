@@ -46,6 +46,32 @@ with Hull entities :
     Hull.delete('entity', { uid: 'http://example.com' })
 
 
+### Compiling widgets and tempaltes with Rails' Assets Pipeline
+
+Load `handlebars_assets` in your Gemfile as part of the assets group
+
+    group :assets do
+      gem 'handlebars_assets'
+    end
+
+
+Place your widgets inside the `app/assets/javascripts` dir.
+
+    app
+    ├── assets
+    │   ├── javascripts
+    │   │   ├── application.js
+    │   │   └── hello
+    │   │       ├── hello.hbs
+    │   │       └── main.js
+
+And require the in your `application.js` file :
+
+
+    //= require handlebars
+    //= require_tree .
+
+
 ### Bring your own users
 
 In addition to providing multiple social login options, Hull allows you to create and authenticate users that are registered within your own app.
@@ -61,6 +87,7 @@ In you view :
         userHash: "<%= Hull.user_hash({ id: "123", email: "bill@hullapp.io", name: "Bill Evans" })  %>"
       });
     </script>
+
 
 
 ## Contributing
