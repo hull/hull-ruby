@@ -21,7 +21,7 @@ Or install it yourself as:
     Hull.configure do |c|
       c.app_id      = "your-app-id"
       c.app_secret  = "your-app-secret"
-      c.endpoint    = "http://ORG-NAMESPACE.hullapp.io"
+      c.org_url     = "http://ORG-NAMESPACE.hullapp.io"
     end
 
 ### Making API Calls
@@ -83,7 +83,7 @@ In you view :
     <script>
       Hull.init({
         appId:  "<%= Hull.app_id %>",
-        orgUrl: "<%= Hull.endpoint %>",
+        orgUrl: "<%= Hull.org_url %>",
         userHash: "<%= Hull.user_hash({ id: "123", email: "bill@hullapp.io", name: "Bill Evans" })  %>"
       });
     </script>
