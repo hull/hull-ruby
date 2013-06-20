@@ -16,9 +16,10 @@ module Hull
     DEFAULT_APP_ID =     ENV['HULL_APP_ID']
 
   
-    # The endpoint that will be used to connect if none is set
+    # The ORG_URL that will be used to connect if none is set
     #
-    DEFAULT_ENDPOINT = ENV['HULL_ORG_URL']
+    DEFAULT_ORG_URL = ENV['HULL_ORG_URL']
+    DEFAULT_JS_URL  = ENV['HULL_JS_URL']
 
     DEFAULT_CACHE_STORE = nil
 
@@ -29,6 +30,8 @@ module Hull
 
     DEFAULT_LOGGER = nil
 
+    DEFAULT_CURRENT_USER = Proc.new { self.respond_to?(:current_user) ? current_user : @user }
+
     # An array of valid keys in the options hash when configuring a {Hull::Client}
     VALID_OPTIONS_KEYS = [
       :proxy,
@@ -36,16 +39,19 @@ module Hull
       :connection_options,
       :app_id,
       :app_secret,
-      :endpoint,
+      :org_url,
       :user_agent,
       :cache_store,
-      :logger
+      :logger,
+      :current_user,
+      :user_attributes,
+      :js_url
     ]
 
     attr_accessor *VALID_OPTIONS_KEYS
 
     def domain
-      @domain ||= URI.parse(endpoint).host unless endpoint.nil?
+      @domain ||= URI.parse(org_url).host unless org_url.nil?
     end
 
     # When this module is extended, set all configuration options to their default values
@@ -75,9 +81,11 @@ module Hull
       self.connection_options = DEFAULT_CONNECTION_OPTIONS
       self.app_id             = DEFAULT_APP_ID
       self.app_secret         = DEFAULT_APP_SECRET
-      self.endpoint           = DEFAULT_ENDPOINT
+      self.org_url            = DEFAULT_ORG_URL
+      self.js_url             = DEFAULT_JS_URL
       self.user_agent         = DEFAULT_USER_AGENT
       self.cache_store        = DEFAULT_CACHE_STORE
+      self.current_user       = DEFAULT_CURRENT_USER
       self
     end
 

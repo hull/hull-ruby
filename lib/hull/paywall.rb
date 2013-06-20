@@ -74,7 +74,7 @@ module Hull
       Hull.configure do |config|
         config.app_id      = @options[:app_id]      || ENV['HULL_APP_ID']
         config.app_secret  = @options[:app_secret]  || ENV['HULL_APP_SECRET']
-        config.endpoint    = @options[:endpoint]    || ENV['HULL_ORG_URL']
+        config.org_url     = @options[:org_url]    || ENV['HULL_ORG_URL']
       end
       @paths = @options[:paths].map { |k,v| [Regexp.new(k), v] }
     end

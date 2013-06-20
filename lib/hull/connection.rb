@@ -18,7 +18,7 @@ module Hull
           :user_agent => user_agent,
         },
         :ssl => {:verify => false},
-        :url => options.fetch(:endpoint, endpoint),
+        :url => options.fetch(:org_url, org_url),
         :timeout => 10,
         :proxy => options.fetch(:proxy, proxy),
         :open_timeout => 10

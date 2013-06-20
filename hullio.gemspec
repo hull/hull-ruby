@@ -16,8 +16,8 @@ Gem::Specification.new do |gem|
   gem.version       = Hull::VERSION
 
   # Dependencies
-  gem.add_dependency 'faraday',               '~> 0.8'
-  gem.add_dependency 'faraday_middleware',    '~> 0.9'
+  gem.add_dependency 'faraday'
+  gem.add_dependency 'faraday_middleware'
   gem.add_dependency 'multi_json'
   gem.add_dependency 'mime-types'
 
