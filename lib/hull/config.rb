@@ -44,6 +44,7 @@ module Hull
       :cache_store,
       :logger,
       :current_user,
+      :authenticate_users,
       :user_attributes,
       :js_url
     ]
@@ -86,6 +87,7 @@ module Hull
       self.user_agent         = DEFAULT_USER_AGENT
       self.cache_store        = DEFAULT_CACHE_STORE
       self.current_user       = DEFAULT_CURRENT_USER
+      self.authenticate_users = false
       self
     end
 
