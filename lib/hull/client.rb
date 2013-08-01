@@ -25,8 +25,9 @@ module Hull
 
     def credentials
       {
-        :app_id           => app_id,
-        :app_secret       => app_secret
+        :app_id      => @app_id,
+        :app_secret  => @app_secret,
+        :user_id     => @user_id,
       }
     end
     

@@ -46,6 +46,18 @@ with Hull entities :
     Hull.delete('entity', { uid: 'http://example.com' })
 
 
+### Making API calls as as a User
+
+From its user ID
+
+        Hull.as('51fa7afd09e50d11f1000002').get('me')
+
+From a user UID
+
+        Hull.as('twitter:hull').get('me')
+        Hull.as('external:3637').get('me')
+
+
 ### Compiling widgets and tempaltes with Rails' Assets Pipeline
 
 Load `handlebars_assets` in your Gemfile as part of the assets group

@@ -12,6 +12,10 @@ module Hull
       Hull::Client.new(options)
     end
 
+    def as(user_id)
+      Hull::Client.new({ user_id: user_id })
+    end
+
     # Delegate to hull::Client
     def method_missing(method, *args, &block)
       return super unless new.respond_to?(method)

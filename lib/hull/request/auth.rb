@@ -6,7 +6,8 @@ module Hull
 
       def call(env)
         env[:request_headers]["Hull-Access-Token"] = @credentials[:app_secret]
-        env[:request_headers]["Hull-App-id"] = @credentials[:app_id]
+        env[:request_headers]["Hull-App-Id"] = @credentials[:app_id]
+        env[:request_headers]["Hull-User-Id"] = @credentials[:user_id] if @credentials[:user_id]
         @app.call(env)
       end
 

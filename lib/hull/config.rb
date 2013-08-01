@@ -44,6 +44,7 @@ module Hull
       :cache_store,
       :logger,
       :current_user,
+      :user_id, 
       :authenticate_users,
       :user_attributes,
       :js_url
