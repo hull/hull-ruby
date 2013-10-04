@@ -58,7 +58,7 @@ From a user UID
         Hull.as('external:3637').get('me')
 
 
-### Compiling widgets and tempaltes with Rails' Assets Pipeline
+### Compiling widgets and templates with Rails' Assets Pipeline
 
 Load `handlebars_assets` in your Gemfile as part of the assets group
 
