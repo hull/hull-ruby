@@ -24,6 +24,8 @@ Or install it yourself as:
       c.org_url     = "http://ORG-NAMESPACE.hullapp.io"
     end
 
+In Rails, you can include this in an initializer.
+
 ### Making API Calls
 
 `get`, `put`, `post` and `delete` methods are directly available on Hull.
@@ -57,6 +59,25 @@ From a user UID
         Hull.as('twitter:hull').get('me')
         Hull.as('external:3637').get('me')
 
+
+
+### Getting the current User
+
+Hull.authenticate_user allows you to get the current User's ID.
+
+#### Rails
+
+
+        class MyController < ApplicationController
+            def current_hull_user_id
+                @current_hull_user_id ||= Hull.authenticate_user(request.env)
+            end
+            def current_hull_user
+                // You probably should cache this or record this information in a session
+                // to avoid making calls to Hull's API on each request
+                @current_hull_user ||= Hull.get(current_hull_user_id)
+            end
+        end
 
 ### Compiling widgets and templates with Rails' Assets Pipeline
 
