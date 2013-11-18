@@ -1,6 +1,6 @@
 require 'faraday_middleware/response_middleware'
 
-module FaradayMiddleware
+module Hull::Response
   # Public: Parse response bodies as JSON.
   class ParseJson < ResponseMiddleware
     dependency do
