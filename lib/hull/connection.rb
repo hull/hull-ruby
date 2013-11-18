@@ -1,5 +1,6 @@
 require 'faraday'
 require 'hull/request/auth'
+require 'hull/response/parse_json'
 require 'faraday_middleware/response/parse_json'
 require 'faraday_middleware/response/caching'
 
@@ -27,7 +28,7 @@ module Hull
         builder.use Hull::Request::Auth, credentials
         builder.use Faraday::Request::UrlEncoded
         builder.use FaradayMiddleware::Caching, cache_store unless cache_store.nil?
-        builder.use FaradayMiddleware::ParseJson
+        builder.use Hull::Response::ParseJson
         builder.use Faraday::Response::RaiseError
         builder.adapter(adapter)
       end
