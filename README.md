@@ -30,7 +30,7 @@ In Rails, you can include this in an initializer.
 
 `get`, `put`, `post` and `delete` methods are directly available on Hull.
 
-examples: 
+examples:
 
     # To get the current app
     Hull.get('app')
@@ -109,9 +109,9 @@ And require the in your `application.js` file :
 
 In addition to providing multiple social login options, Hull allows you to create and authenticate users that are registered within your own app.
 
-To use this feature, you just have to add a `userHash` key at the initialization of hull.js : 
+To use this feature, you just have to add a `userHash` key at the initialization of hull.js :
 
-In you view : 
+In you view :
 
     <script>
       Hull.init({
@@ -121,7 +121,19 @@ In you view :
       });
     </script>
 
+### Hooks
 
+[Hooks](hull.io/docs/libraries/#hooks) allow you to be notified every time an
+object in your app is created, updated or deleted.
+
+```ruby
+require 'hull/middlewares/hook'
+
+# path option default is '/__hull-hook__'
+use Hull::Middlewares::Hook, path: '/hullook', secret: ENV['HULL_APP_SECRET'] do |event, request|
+  // Do something with event
+end
+```
 
 ## Contributing
 
