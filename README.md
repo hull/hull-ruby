@@ -131,7 +131,7 @@ require 'hull/middlewares/hook'
 
 # path option default is '/__hull-hook__'
 use Hull::Middlewares::Hook, path: '/hullook', secret: ENV['HULL_APP_SECRET'] do |event, request|
-  // Do something with event
+  # Do something with event
 end
 ```
 
