@@ -18,11 +18,13 @@ Or install it yourself as:
 
 ### Configuration
 
-    Hull.configure do |c|
-      c.app_id      = "your-app-id"
-      c.app_secret  = "your-app-secret"
-      c.org_url     = "http://ORG-NAMESPACE.hullapp.io"
-    end
+```rb
+Hull.configure do |c|
+  c.app_id = "your-app-id"
+  c.app_secret = "your-app-secret"
+  c.org_url = "http://ORG-NAMESPACE.hullapp.io"
+end
+```
 
 In Rails, you can include this in an initializer.
 
@@ -32,61 +34,65 @@ In Rails, you can include this in an initializer.
 
 examples:
 
-    # To get the current app
-    Hull.get('app')
+```rb
+# To get the current app
+Hull.get('app')
 
-    # To get the a list of comments on the current app (with pagination)
-    Hull.get('app/comments', limit: 10, page: 2)
+# To get the a list of comments on the current app (with pagination)
+Hull.get('app/comments', limit: 10, page: 2)
 
-    # To update an existing object
-    Hull.put('app', { name: 'My Super App' })
+# To update an existing object
+Hull.put('app', { name: 'My Super App' })
+```
 
 with Hull entities :
 
-    Hull.get('entity', { uid: 'http://example.com' })
-    Hull.put('entity', { uid: 'http://example.com', name: 'My super Page' })
-    Hull.delete('entity', { uid: 'http://example.com' })
-
+```rb
+Hull.get('entity', { uid: 'http://example.com' })
+Hull.put('entity', { uid: 'http://example.com', name: 'My super Page' })
+Hull.delete('entity', { uid: 'http://example.com' })
+```
 
 ### Making API calls as as a User
 
-From its user ID
+```rb
+# From its user ID
+Hull.as('51fa7afd09e50d11f1000002').get('me')
 
-        Hull.as('51fa7afd09e50d11f1000002').get('me')
-
-From a user UID
-
-        Hull.as('twitter:hull').get('me')
-        Hull.as('external:3637').get('me')
-
-
+# From a user UID
+Hull.as('twitter:hull').get('me')
+Hull.as('external:3637').get('me')
+```
 
 ### Getting the current User
 
-Hull.authenticate_user allows you to get the current User's ID.
+`Hull.authenticate_user` allows you to get the current User's ID.
 
 #### Rails
 
-
-        class MyController < ApplicationController
-            def current_hull_user_id
-                @current_hull_user_id ||= Hull.authenticate_user(request.env)
-            end
-            def current_hull_user
-                // You probably should cache this or record this information in a session
-                // to avoid making calls to Hull's API on each request
-                @current_hull_user ||= Hull.get(current_hull_user_id)
-            end
-        end
+```rb
+class MyController < ApplicationController
+  def current_hull_user
+    # You probably should cache this or record this information in a session
+    # to avoid making calls to Hull's API on each request
+    @current_hull_user ||= Hull.get(current_hull_user_id)
+  end
+  
+  def current_hull_user_id
+    @current_hull_user_id ||= Hull.authenticate_user(request.env)
+  end
+end
+```
 
 ### Compiling widgets and templates with Rails' Assets Pipeline
 
 Load `handlebars_assets` in your Gemfile as part of the assets group
 
-    group :assets do
-      gem 'handlebars_assets'
-    end
-
+```rb
+group :assets do
+  gem 'handlebars_assets'
+end
+```
 
 Place your widgets inside the `app/assets/javascripts` dir.
 
@@ -100,10 +106,10 @@ Place your widgets inside the `app/assets/javascripts` dir.
 
 And require the in your `application.js` file :
 
-
-    //= require handlebars
-    //= require_tree .
-
+```js
+//= require handlebars
+//= require_tree .
+```
 
 ### Bring your own users
 
@@ -113,13 +119,15 @@ To use this feature, you just have to add a `userHash` key at the initialization
 
 In you view :
 
-    <script>
-      Hull.init({
-        appId:  "<%= Hull.app_id %>",
-        orgUrl: "<%= Hull.org_url %>",
-        userHash: "<%= Hull.user_hash({ id: "123", email: "bill@hullapp.io", name: "Bill Evans" })  %>"
-      });
-    </script>
+```html
+<script>
+  Hull.init({
+    appId:  "<%= Hull.app_id %>",
+    orgUrl: "<%= Hull.org_url %>",
+    userHash: "<%= Hull.user_hash({ id: "123", email: "bill@hullapp.io", name: "Bill Evans" })  %>"
+  });
+</script>
+```
 
 ### Hooks
 
