@@ -51,6 +51,9 @@ with Hull entities :
 Hull.get('entity', { uid: 'http://example.com' })
 Hull.put('entity', { uid: 'http://example.com', name: 'My super Page' })
 Hull.delete('entity', { uid: 'http://example.com' })
+
+# Get comments on the Entity identified by 'http://example.com' 
+Hull.get('entity/comments', { uid: 'http://example.com' })
 ```
 
 ### Making API calls as as a User
