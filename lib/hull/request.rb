@@ -36,9 +36,17 @@ module Hull
 
     # Perform an HTTP request
     def request(method, path, params={}, options={})
-      Hull.log("#{method.upcase} #{path} - params: #{params.to_json}")
+      Hull.log("#{method.upcase} #{path} - params: #{params.to_json} - options: #{options.inspect}")
       response = connection(options).run_request(method, nil, nil, nil) do |request|
-        request.options[:raw] = true if options[:raw]
+
+        if request.options.is_a?(Hash)
+          request.options[:timeout]       ||= options.fetch(:timeout, 10)
+          request.options[:open_timeout]  ||= options.fetch(:open_timeout, 10)
+        elsif request.options.respond_to?(:timeout)
+          request.options.timeout         ||= options.fetch(:timeout, 10)
+          request.options.open_timeout    ||= options.fetch(:open_timeout, 10)
+        end
+
         case method.to_sym
         when :delete, :get
           request.url(path, params)

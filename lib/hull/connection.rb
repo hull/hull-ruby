@@ -20,9 +20,7 @@ module Hull
         },
         :ssl => {:verify => false},
         :url => options.fetch(:org_url, org_url),
-        :timeout => 10,
-        :proxy => options.fetch(:proxy, proxy),
-        :open_timeout => 10
+        :proxy => options.fetch(:proxy, proxy)
       }
       @connection ||= Faraday.new(default_options.deep_merge(connection_options)) do |builder|
         builder.use Hull::Request::Auth, credentials
