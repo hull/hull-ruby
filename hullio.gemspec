@@ -16,15 +16,15 @@ Gem::Specification.new do |gem|
   gem.version       = Hull::VERSION
 
   # Dependencies
-  gem.add_dependency 'faraday'
-  gem.add_dependency 'faraday_middleware'
-  gem.add_dependency 'multi_json'
-  gem.add_dependency 'mime-types'
-  gem.add_dependency 'jwt'
-  gem.add_dependency 'addressable'
-  gem.add_dependency 'postrank-uri'
+  gem.add_dependency 'faraday', ['>= 0.7', '< 0.10']
+  gem.add_dependency 'faraday_middleware', ['>= 0.7', '< 0.10']
+  gem.add_dependency 'multi_json', '~> 1.0'
+  gem.add_dependency 'mime-types', '~> 2.0'
+  gem.add_dependency 'jwt', '~> 1.0'
+  gem.add_dependency 'addressable', '~> 2.3'
+  gem.add_dependency 'postrank-uri', '~> 1.0'
 
   # Development Dependencies
-  gem.add_development_dependency 'activesupport',       ['>= 2.3.9', '< 4']
+  gem.add_development_dependency 'activesupport', ['>= 2.3.9', '< 4']
 
 end

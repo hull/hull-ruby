@@ -4,7 +4,6 @@ require 'hull/request'
 require 'base64'
 require 'openssl'
 require 'jwt'
-require 'active_support/core_ext/hash'
 
 module Hull
   class Client
@@ -70,7 +69,7 @@ module Hull
     end
 
     def user_token user, claims={}
-      claims = claims.symbolize_keys
+      claims = claims.inject({}) { |c,(k,v)| c[k.to_sym] = v }
       if user.is_a?(String)
         claims[:sub] = user
       else
