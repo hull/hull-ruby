@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "hullio"
   gem.require_paths = ["lib"]
   gem.version       = Hull::VERSION
+  gem.licenses      = ['MIT']
 
   # Dependencies
   gem.add_dependency 'faraday', ['>= 0.7', '< 0.10']
