@@ -3,6 +3,8 @@ require 'hull/connection'
 require 'hull/request'
 require 'base64'
 require 'openssl'
+require 'jwt'
+require 'active_support/core_ext/hash'
 
 module Hull
   class Client
@@ -25,12 +27,13 @@ module Hull
 
     def credentials
       {
-        :app_id      => @app_id,
-        :app_secret  => @app_secret,
-        :user_id     => @user_id,
+        :app_id       => @app_id,
+        :app_secret   => @app_secret,
+        :user_id      => @user_id,
+        :access_token => @access_token
       }
     end
-    
+
     def app
       return unless app_id
       @app ||= get("/app", :app_id => app_id)
@@ -51,7 +54,7 @@ module Hull
     end
 
     def authenticate_user env
-      require 'rack/request'  
+      require 'rack/request'
       request = Rack::Request.new(env)
       cookie  = request.cookies["hull_#{self.app_id}"]
       user_auth = read_cookie(cookie)
@@ -65,6 +68,19 @@ module Hull
       sig = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('sha1'), app_secret, [message, timestamp].join(" "))
       [message, sig, timestamp].join(" ")
     end
-    
+
+    def user_token user, claims={}
+      claims = claims.symbolize_keys
+      if user.is_a?(String)
+        claims[:sub] = user
+      else
+        claims[:'io.hull.user'] = user
+      end
+      claims = claims.merge({ iat: Time.now.to_i, iss: app_id })
+      claims[:nbf] = claims[:nbf].to_i if claims[:nbf]
+      claims[:exp] = claims[:exp].to_i if claims[:exp]
+      JWT.encode(claims, app_secret)
+    end
+
   end
 end

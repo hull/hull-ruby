@@ -15,7 +15,7 @@ module Hull
     DEFAULT_APP_SECRET = ENV['HULL_APP_SECRET']
     DEFAULT_APP_ID =     ENV['HULL_APP_ID']
 
-  
+
     # The ORG_URL that will be used to connect if none is set
     #
     DEFAULT_ORG_URL = ENV['HULL_ORG_URL']
@@ -24,7 +24,7 @@ module Hull
     DEFAULT_CACHE_STORE = nil
 
     DEFAULT_PROXY = nil
-    
+
     # The value sent in the 'User-Agent' header if none is set
     DEFAULT_USER_AGENT = "Hull Ruby Gem #{Hull::VERSION}"
 
@@ -44,7 +44,8 @@ module Hull
       :cache_store,
       :logger,
       :current_user,
-      :user_id, 
+      :user_id,
+      :access_token,
       :authenticate_users,
       :user_attributes,
       :js_url

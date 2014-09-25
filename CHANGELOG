@@ -1,0 +1,6 @@
+# 0.4.0
+
+* Add support for JWTs
+* Add helpers for Entities `Hull::Entity.encode` and `Hull::Entity.decode`
+
+

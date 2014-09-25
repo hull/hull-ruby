@@ -1,6 +1,7 @@
 require 'hull/core_ext/hash'
 require 'hull/client'
 require 'hull/config'
+require 'hull/entity'
 
 module Hull
   extend Config
@@ -12,8 +13,8 @@ module Hull
       Hull::Client.new(options)
     end
 
-    def as(user_id)
-      Hull::Client.new({ user_id: user_id })
+    def as(user)
+      Hull::Client.new({ access_token: self.user_token(user) })
     end
 
     # Delegate to Hull::Client

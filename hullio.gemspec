@@ -20,6 +20,9 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'faraday_middleware'
   gem.add_dependency 'multi_json'
   gem.add_dependency 'mime-types'
+  gem.add_dependency 'jwt'
+  gem.add_dependency 'addressable'
+  gem.add_dependency 'postrank-uri'
 
   # Development Dependencies
   gem.add_development_dependency 'activesupport',       ['>= 2.3.9', '< 4']
