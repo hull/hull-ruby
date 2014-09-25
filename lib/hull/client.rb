@@ -69,7 +69,7 @@ module Hull
     end
 
     def user_token user, claims={}
-      claims = claims.inject({}) { |c,(k,v)| c[k.to_sym] = v }
+      claims = claims.inject({}) { |c,(k,v)| c.merge(k.to_sym => v) }
       if user.is_a?(String)
         claims[:sub] = user
       else
