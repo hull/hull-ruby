@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ### Configuration
 
-```rb
+```ruby
 Hull.configure do |c|
   c.app_id = "your-app-id"
   c.app_secret = "your-app-secret"
@@ -35,25 +35,32 @@ In Rails, you can include this in an initializer.
 examples:
 
 ```rb
-# To get the current app
+# Get the current app
 Hull.get('app')
 
-# To get the a list of comments on the current app (with pagination)
+# Get the a list of comments on the current app (with pagination)
 Hull.get('app/comments', limit: 10, page: 2)
 
-# To update an existing object
+# Update an existing object
 Hull.put('app', { name: 'My Super App' })
 ```
 
 with Hull entities :
 
 ```rb
-Hull.get('entity', { uid: 'http://example.com' })
-Hull.put('entity', { uid: 'http://example.com', name: 'My super Page' })
-Hull.delete('entity', { uid: 'http://example.com' })
+entityId = Hull::Entity.encode('http://example.com')
+#=>"~aHR0cDovL2V4YW1wbGUuY29t"
+
+Hull.get(entityId)
+Hull.put(entityId)
+Hull.delete(entityId)
 
 # Get comments on the Entity identified by 'http://example.com' 
-Hull.get('entity/comments', { uid: 'http://example.com' })
+Hull.get(entityId+'/comments')
+
+# Decoding an encoded entity:
+Hull::Entity.decode(entityId)
+#=>'http://example.com'
 ```
 
 ### Making API calls as as a User
@@ -62,72 +69,57 @@ Hull.get('entity/comments', { uid: 'http://example.com' })
 # From its user ID
 Hull.as('51fa7afd09e50d11f1000002').get('me')
 
-# From a user UID
+# Find a User based on his identity from an external service:
+
+# Find user from his Twitter handle:
 Hull.as('twitter:hull').get('me')
+
+# Find user from his Faceboo ID
+Hull.as('facebook:fb_uid').get('me')
+
+# Find user from his ID in your app (BYOU)
 Hull.as('external:3637').get('me')
+
+# From a User in your database, with lazy creation (Checkout [Bring your own Users Documentation](http://hull.io/docs/users/byou))
+userHash = {external_id:'1234', name:'Romain', email:'user@host.com'}
+Hull.as(userHash).get('me')
 ```
 
 ### Getting the current User
 
-`Hull.authenticate_user` allows you to get the current User's ID.
+`Hull.authenticate_user` allows you to retrieve the current User's ID.
 
 #### Rails
 
 ```rb
 class MyController < ApplicationController
+  def current_hull_user_id
+    @current_hull_user_id ||= Hull.authenticate_user(request.env)
+  end
+
   def current_hull_user
     # You probably should cache this or record this information in a session
     # to avoid making calls to Hull's API on each request
     @current_hull_user ||= Hull.get(current_hull_user_id)
   end
   
-  def current_hull_user_id
-    @current_hull_user_id ||= Hull.authenticate_user(request.env)
-  end
 end
 ```
 
-### Compiling widgets and templates with Rails' Assets Pipeline
-
-Load `handlebars_assets` in your Gemfile as part of the assets group
-
-```rb
-group :assets do
-  gem 'handlebars_assets'
-end
-```
-
-Place your widgets inside the `app/assets/javascripts` dir.
-
-    app
-    ├── assets
-    │   ├── javascripts
-    │   │   ├── application.js
-    │   │   └── hello
-    │   │       ├── hello.hbs
-    │   │       └── main.js
-
-And require the in your `application.js` file :
-
-```js
-//= require handlebars
-//= require_tree .
-```
 
 ### Bring your own users
 
-In addition to providing multiple social login options, Hull allows you to create and authenticate users that are registered within your own app.
+Using JWT, you can use Hull with Users from your system.
+To use this feature, you just have to add a `accessToken` key at the initialization of hull.js. Read more at http://hull.io/docs/users/byou
 
-To use this feature, you just have to add a `userHash` key at the initialization of hull.js :
-
-In you view :
+In your view :
 
 ```html
 <script>
   Hull.init({
     appId:  "<%= Hull.app_id %>",
     orgUrl: "<%= Hull.org_url %>",
-    userHash: "<%= Hull.user_hash({ id: "123", email: "bill@hullapp.io", name: "Bill Evans" })  %>"
+    accessToken: "<%= Hull.user_token({external_id: "123", email: "bill@hullapp.io", name: "Bill Evans" })  %>"
   });
 </script>
 ```
