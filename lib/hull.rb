@@ -14,7 +14,11 @@ module Hull
     end
 
     def as(user)
-      Hull::Client.new({ access_token: self.user_token(user) })
+      if user.is_a?(String)
+        Hull::Client.new({ user_id: user })
+      else
+        Hull::Client.new({ access_token: self.user_token(user) })
+      end
     end
 
     # Delegate to Hull::Client
