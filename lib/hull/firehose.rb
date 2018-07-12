@@ -20,8 +20,11 @@ module Hull
     end
 
     # Perform an HTTP POST request
-    def alias(path, params={}, options={})
-      firehose_request(:post, api_path(path), params, options)
+    def alias(body, options={})
+      firehose_request([{
+        type: 'alias',
+        body: body
+      }], options)
     end
 
     private
