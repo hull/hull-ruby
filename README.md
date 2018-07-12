@@ -43,11 +43,22 @@ Hull.as(identity).get('me')
 
 ### Capturing user Traits and track Events
 
+For users
+
 ```
-user = Hull.as(email: 'user@example.com')
+user = Hull.as_user(email: 'user@example.com')
 user.traits({ name: 'Bob', age: 21 })
 user.track('Visited Page', { url: 'http://www.hull.io' })
 ```
+
+
+For accounts
+
+```
+account = Hull.as_account(domain: 'hull.op')
+user.traits({ name: 'Hull inc' })
+```
+
 
 
 

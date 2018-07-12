@@ -46,6 +46,21 @@ module Hull
       claims = claims.merge({ iat: Time.now.to_i, iss: app_id })
       claims[:nbf] = claims[:nbf].to_i if claims[:nbf]
       claims[:exp] = claims[:exp].to_i if claims[:exp]
+      claims[:'io.hull.subjectType'] = 'user'
+      JWT.encode(claims, app_secret)
+    end
+
+    def account_token account, claims={}
+      claims = claims.inject({}) { |c,(k,v)| c.merge(k.to_sym => v) }
+      if account.is_a?(String)
+        claims[:'io.hull.asAccount'] = { id: account }
+      else
+        claims[:'io.hull.asAccount'] = account
+      end
+      claims = claims.merge({ iat: Time.now.to_i, iss: app_id })
+      claims[:nbf] = claims[:nbf].to_i if claims[:nbf]
+      claims[:exp] = claims[:exp].to_i if claims[:exp]
+      claims[:'io.hull.subjectType'] = 'account'
       JWT.encode(claims, app_secret)
     end
 
