@@ -1,7 +1,5 @@
-require 'hull/core_ext/hash'
 require 'hull/client'
 require 'hull/config'
-require 'hull/entity'
 
 module Hull
   extend Config
@@ -15,7 +13,11 @@ module Hull
 
     def as(user)
       if user.is_a?(String)
-        Hull::Client.new({ user_id: user })
+        if user =~ /^[0-9a-z]{24}$/
+          Hull::Client.new({ access_token: self.user_token({ id: user }) })
+        else
+          raise ArgumentError.new("Invalid user_id")
+        end
       else
         Hull::Client.new({ access_token: self.user_token(user) })
       end

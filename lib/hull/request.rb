@@ -35,10 +35,9 @@ module Hull
     end
 
     # Perform an HTTP request
-    def request(method, path, params={}, options={})
-      Hull.log("#{method.upcase} #{path} - params: #{params.to_json} - options: #{options.inspect}")
+    def request(method, path, params={}, opts={})
+      options = { url: "https://#{organization}" }.merge(opts)
       response = connection(options).run_request(method, nil, nil, nil) do |request|
-
         if request.options.is_a?(Hash)
           request.options[:timeout]       ||= options.fetch(:timeout, 10)
           request.options[:open_timeout]  ||= options.fetch(:open_timeout, 10)
@@ -52,7 +51,7 @@ module Hull
           request.url(path, params)
         when :post, :put
           request.path = path
-          request.body = params unless params.empty?
+          request.body = MultiJson.dump(params) unless params.empty?
         end
       end
       options[:raw] ? response : response.body

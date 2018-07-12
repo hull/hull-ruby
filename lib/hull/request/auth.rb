@@ -5,6 +5,7 @@ module Hull
     class Auth  < Faraday::Middleware
 
       def call(env)
+        env[:request_headers]["Hull-Organization"] = @credentials[:organization]
         env[:request_headers]["Hull-App-Id"] = @credentials[:app_id]
         if !@credentials[:access_token].nil?
           env[:request_headers]["Hull-Access-Token"] = @credentials[:access_token]
