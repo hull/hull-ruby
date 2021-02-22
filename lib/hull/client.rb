@@ -1,6 +1,7 @@
 require 'hull/config'
 require 'hull/connection'
 require 'hull/request'
+require 'hull/firehose'
 require 'base64'
 require 'openssl'
 require 'jwt'
@@ -12,6 +13,7 @@ module Hull
 
     include Hull::Connection
     include Hull::Request
+    include Hull::Firehose
 
     # Initializes a new API object
     #
@@ -29,43 +31,9 @@ module Hull
         :app_id       => @app_id,
         :app_secret   => @app_secret,
         :user_id      => @user_id,
-        :access_token => @access_token
+        :access_token => @access_token,
+        :organization => organization
       }
-    end
-
-    def app
-      return unless app_id
-      @app ||= get("/app", :app_id => app_id)
-    end
-
-
-    def read_cookie str
-      return if str.nil? || str.length == 0
-      JSON.parse(Base64.decode64(str)) rescue nil
-    end
-
-    def current_user_id user_id, user_sig
-      return unless user_id && user_sig
-      time, signature = user_sig.split(".")
-      data    = [time, user_id].join("-")
-      digest  = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('sha1'), self.app_secret, data)
-      return user_id if digest == signature
-    end
-
-    def authenticate_user env
-      require 'rack/request'
-      request = Rack::Request.new(env)
-      cookie  = request.cookies["hull_#{self.app_id}"]
-      user_auth = read_cookie(cookie)
-      return unless user_auth
-      current_user_id(user_auth['Hull-User-Id'], user_auth['Hull-User-Sig'])
-    end
-
-    def user_hash user_infos
-      timestamp = Time.now.to_i.to_s
-      message = Base64.encode64(user_infos.to_json).gsub("\n", "")
-      sig = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('sha1'), app_secret, [message, timestamp].join(" "))
-      [message, sig, timestamp].join(" ")
     end
 
     def user_token user, claims={}
@@ -73,11 +41,26 @@ module Hull
       if user.is_a?(String)
         claims[:sub] = user
       else
-        claims[:'io.hull.user'] = user
+        claims[:'io.hull.asUser'] = user
       end
       claims = claims.merge({ iat: Time.now.to_i, iss: app_id })
       claims[:nbf] = claims[:nbf].to_i if claims[:nbf]
       claims[:exp] = claims[:exp].to_i if claims[:exp]
+      claims[:'io.hull.subjectType'] = 'user'
+      JWT.encode(claims, app_secret)
+    end
+
+    def account_token account, claims={}
+      claims = claims.inject({}) { |c,(k,v)| c.merge(k.to_sym => v) }
+      if account.is_a?(String)
+        claims[:'io.hull.asAccount'] = { id: account }
+      else
+        claims[:'io.hull.asAccount'] = account
+      end
+      claims = claims.merge({ iat: Time.now.to_i, iss: app_id })
+      claims[:nbf] = claims[:nbf].to_i if claims[:nbf]
+      claims[:exp] = claims[:exp].to_i if claims[:exp]
+      claims[:'io.hull.subjectType'] = 'account'
       JWT.encode(claims, app_secret)
     end
 
